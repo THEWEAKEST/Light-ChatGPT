@@ -1,0 +1,162 @@
+<template>
+    <div id="main">
+        <div id="HeadLine" style="justify-content: center;align-content: center;">
+            <p>GENERAL</p>
+            </div>
+        <div id="chatbox">
+            <el-scrollbar>
+            <div class="message-layout-zone" v-for="chatword in userchat" :key="chatword.id">
+                <div :class="chatword.class">        <!--bind class with chat-zone class-->
+                    {{chatword.text}}
+                </div><br>
+            </div>
+            </el-scrollbar>
+        </div>
+    
+    <form  id="input-form">
+        <input type="text" id="input-field" v-model="userinput" autocomplete="on"/><br>   <!--Don't miss the '/'-->
+        <el-button id="submit-button" @click="SubmitFunction">Submit</el-button> <!--If this is Button it 
+            will refresh the web when click.
+            But el-button won't.
+            I don't know why-->
+    </form>
+    </div>
+</template> 
+
+<script setup lang="ts">
+import {ref} from 'vue'
+import axios from 'axios';
+interface msg
+{
+    message:string;
+}
+interface getans
+{
+    ans:string;
+}
+const usernum = ref(0)
+const userchat = ref([{id:usernum.value++,text:"Hello ! I'm MiniChatGPT let's talk!",class: "bot-chat-zone"}]) /*remember the value*/
+const userinput = ref("")
+let return_ans:getans;
+async function SubmitFunction()
+{
+    /*console.log(userinput.value)*/
+    const nowmessage = userinput
+    if(nowmessage.value == "")
+    {
+        console.log("It's empty!")
+        return ;
+    }
+    /*console.log(nowmessage.value)*/
+    userchat.value.push({id: usernum.value++ , text: nowmessage.value ,class:"user-chat-zone"})
+    const transdata:msg={message:nowmessage.value};
+    await axios.post<getans>('http://localhost:5000/transfer',transdata).then(response => {console.log(response.data); return_ans = response.data; }).catch(error => {console.log(error.data);});
+    console.log("get the ans:")
+    console.log(return_ans.ans)
+    userchat.value.push({id: usernum.value++ , text: return_ans.ans ,class:"bot-chat-zone"})
+    userinput.value=""
+}
+</script>
+
+<style>
+.message-layout-zone
+{
+    height:50px;
+}
+.chat-message {
+    display: inline-block;
+}
+
+#main
+{
+    background-color: #95ec69;
+}
+
+.user-chat-zone            /*.for class # for id*/
+{
+    max-width:600px;
+    background-color:lightpink;
+    border-color:peru;
+    float:right;
+    border-radius: 5px;
+    font-size:xx-large;
+}
+.bot-chat-zone
+{
+    max-width:6 00px;
+    background-color:orange;
+    border-radius:5px;
+    float:left;
+    border-color:deeppink;
+    font-size:xx-large;
+}
+#chatbox {
+    background-color:lightblue;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    height: 100%;
+    margin: 0 0 20px;
+    overflow-y: scroll;
+    padding: 10px;
+    max-height:1610px;
+}
+/*
+￼
+#chatbox {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    height: 550px;
+    margin: 0 0 20px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+*/
+.chat-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.user {
+    background-color: #95ec69;
+    color: #333;
+}
+
+.chatbot {
+    background-color: #ffffff;
+    color: #333;
+}
+
+#input-form {
+    width:100%;
+    height:100px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#input-field {
+    max-width:50%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    flex-grow: 1;
+    background-color:antiquewhite;
+}
+
+#submit-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#submit-button:hover {
+    background-color: #3e8e41;
+}
+</style>

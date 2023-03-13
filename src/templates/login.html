@@ -1,0 +1,21 @@
+<html>
+    <head></head>
+    <div>
+        <input type="text" id = "userId">
+    </div>
+    <button onclick="login()">submit</button>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        function login(){
+            d = document.getElementById("userId").value;
+            $.ajax({
+                url:"/login",   //transfer data by /login
+                type:"post",    //transfer data by methods "POST"
+                data: JSON.stringify({'value':d}),  // xu lie hua
+                dataType:"json"
+            //data为要传递给后端的数据，使用JSON.stringify()转换为json格式
+            });
+            
+        }
+    </script>
+</html>
