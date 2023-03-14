@@ -80,6 +80,7 @@ async function SubmitFunction()
     float:right;
     border-radius: 5px;
     font-size:xx-large;
+    white-space:pre-wrap;
 }
 .bot-chat-zone
 {
@@ -89,12 +90,14 @@ async function SubmitFunction()
     float:left;
     border-color:deeppink;
     font-size:xx-large;
+    white-space:pre-wrap;
 }
 #chatbox {
     background-color:lightblue;
     border: 1px solid #ccc;
     border-radius: 3px;
     height: 100%;
+    max-height:1000px;
     margin: 0 0 20px;
     overflow-y: scroll;
     padding: 10px;
