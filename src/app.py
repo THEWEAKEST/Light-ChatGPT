@@ -74,7 +74,10 @@ def NLP(sentence):
             continue
         for j in res:
             s = s + '\n' + j['que']
-    return s
+    if s == "Do you mean ":
+        return "No message"
+    else:
+        return s
 
 def CHECK(question):
     cursor = db.cursor(pymysql.cursors.DictCursor)
@@ -89,17 +92,40 @@ def CHECK(question):
         AddRank(question)
         return res['ans']
 
+HaveView = False
+
 app = Flask("__name__")
 CORS(app)
 
 
-@app.route('/transfer', methods=["POST", "GET"])
+@app.route('/transfer', methods=["POST"])
 def login():
+    print(HaveView)
     respond = json.loads(request.get_data())  # get a dict
     print(respond['message'])
     ans = CHECK(respond['message'])
     print(ans)
     return jsonify({"ans": ans})
+
+@app.route('/transfer', methods=["GET"])
+def load():
+    print(HaveView)
+    rankcursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = "SELECT * FROM ranking"
+    rankcursor.execute(sql)
+    ranklist = rankcursor.fetchall()
+    print(ranklist)  # return a list (lie biao)
+    return ranklist
+
+@app.route('/login',methods=["GET"])
+def req():
+    global HaveView
+    # print(HaveView)
+    if HaveView == False:
+        HaveView = True
+        return jsonify({"situation":False})
+    else:
+        return jsonify({"situation":True})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)  # 此处可自定义使用端口

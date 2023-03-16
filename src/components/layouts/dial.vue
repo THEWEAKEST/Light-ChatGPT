@@ -1,26 +1,41 @@
 <template>
-    <div id="main">
-        <div id="HeadLine" style="justify-content: center;align-content: center;">
-            <p>GENERAL</p>
-            </div>
-        <div id="chatbox">
+    <el-container id="main">
+        <el-header id="HeadLine" style="justify-content: center;align-content: center;">
+            <p style="font-size:xx-large">GENERAL</p>
+        </el-header>
+        <el-main id="chatbox">
             <el-scrollbar>
             <div class="message-layout-zone" v-for="chatword in userchat" :key="chatword.id">
-                <div :class="chatword.class">        <!--bind class with chat-zone class-->
-                    {{chatword.text}}
-                </div><br>
+                <div style="width:100%; min-height:150px;">
+                    <div :class="chatword.class">        <!--bind class with chat-zone class-->
+                        {{chatword.text}}
+                    </div><br><br><br>
+                </div>
             </div>
             </el-scrollbar>
-        </div>
+        </el-main>
     
     <form  id="input-form">
-        <input type="text" id="input-field" v-model="userinput" autocomplete="on"/><br>   <!--Don't miss the '/'-->
+        <input type="text" id="input-field" v-model="userinput" autocomplete="on" list="options"/><br>
+            <datalist id="options">
+                <option value="Are you a real AI"/>
+                <option value="Do you know Genshin Impact"/>
+                <option value="Hello"/>
+                <option value="How do you connect with MySQL?"/>
+                <option value="What is Battlefield2042"/>
+                <option value="What is Call of Duty Modern Warfame II @2022"/>
+                <option value="What is Python"/>
+                <option value="What is Taishan College"/>
+                <option value="Where is Taishan"/>
+                <option value="Who are you"/>
+            </datalist>   
+        <!--Don't miss the '/'-->
         <el-button id="submit-button" @click="SubmitFunction">Submit</el-button> <!--If this is Button it 
             will refresh the web when click.
             But el-button won't.
             I don't know why-->
     </form>
-    </div>
+    </el-container>
 </template> 
 
 <script setup lang="ts">
@@ -61,7 +76,7 @@ async function SubmitFunction()
 <style>
 .message-layout-zone
 {
-    height:50px;
+    min-height:150px;
 }
 .chat-message {
     display: inline-block;
@@ -81,16 +96,18 @@ async function SubmitFunction()
     border-radius: 5px;
     font-size:xx-large;
     white-space:pre-wrap;
+    justify-content: left;
 }
 .bot-chat-zone
 {
-    max-width:6 00px;
+    max-width:600px;
     background-color:orange;
     border-radius:5px;
     float:left;
     border-color:deeppink;
     font-size:xx-large;
     white-space:pre-wrap;
+    justify-content: left;
 }
 #chatbox {
     background-color:lightblue;
@@ -101,7 +118,6 @@ async function SubmitFunction()
     margin: 0 0 20px;
     overflow-y: scroll;
     padding: 10px;
-    max-height:1610px;
 }
 /*
 ￼
