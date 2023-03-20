@@ -2,6 +2,8 @@ import pymysql
 from flask import Flask, redirect, url_for, request, render_template, json, jsonify
 from flask_cors import CORS
 import nltk
+import time
+import datetime
 
 import json
 
@@ -126,40 +128,38 @@ def req():
         return jsonify({"situation":False})
     else:
         return jsonify({"situation":True})
+@app.route('/sendhistory',methods=["POST"])
+def saveHistory():
+    response = json.loads(request.get_data())
+    print(response)
+    json_data = json.dumps(response)
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = "INSERT INTO history (msg,time) VALUES (%s,%s)"
+    cursor.execute(sql,(json_data,datetime.datetime.now()))
+    db.commit()
+    return "success"
+
+@app.route('/history',methods=["POST"])
+def loadHistory():
+    NowId = json.loads(request.get_data())
+    print(NowId)
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = "SELECT msg FROM history WHERE id=%s"
+    cursor.execute(sql,int(NowId))
+    Nowmsg = cursor.fetchone()
+    return Nowmsg['msg']
+
+@app.route('/time',methods=["GET"])
+def sendtime():
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = "SELECT id,time FROM history"
+    cursor.execute(sql)
+    data = cursor.fetchall()
+    print(data)
+    return data
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)  # 此处可自定义使用端口
 
 # CHECK("What is Python")
-'''
-
-# we usually use POST for login
-@app.route('/', methods=["POST","GET"]) # GET
-def index():
-    return render_template('login.html')   # load the login.html web
-
-
-
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template("login.html")
-
-@app.route('/successs/<name>')
-def success(name):
-    return 'welcome %s' % name
-@app.route('/login',methods = ['POST','GET'])
-def login():
-    if request.method == 'POST':
-        print(1)
-        user = request.form['nm']
-        return redirect(url_for('success',name=user))
-    else:
-        print(2)
-        user = request.args.get('nm')
-        return redirect(url_for('success',name = user))
-if __name__ == '__main__':
-    app.run()
-'''

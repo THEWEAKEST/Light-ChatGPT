@@ -1,7 +1,11 @@
 <template>
     <el-container id="main">
-        <el-header id="HeadLine" style="justify-content: center;align-content: center;">
-            <p style="font-size:xx-large">GENERAL</p>
+        <el-header id="HeadLine" style="min-height:200px;justify-content: center;align-content: center;">
+            <p style="font-size:xx-large">GENERAL</p><br>
+            <el-button @click="SaveHistory">SAVE<el-icon><Download/></el-icon></el-button>
+            <el-button @click="LoadHistory">LOAD<el-icon><Upload/></el-icon></el-button><br>
+            <el-input-number v-model="HistoryId" :min="1" :max="99"></el-input-number>
+            
         </el-header>
         <el-main id="chatbox">
             <el-scrollbar>
@@ -41,6 +45,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import axios from 'axios';
+import { ElInputNumber } from 'element-plus';
 interface msg
 {
     message:string;
@@ -52,6 +57,7 @@ interface getans
 const usernum = ref(0)
 const userchat = ref([{id:usernum.value++,text:"Hello ! I'm MiniChatGPT let's talk!",class: "bot-chat-zone"}]) /*remember the value*/
 const userinput = ref("")
+const HistoryId = ref(0)
 let return_ans:getans;
 async function SubmitFunction()
 {
@@ -70,6 +76,17 @@ async function SubmitFunction()
     console.log(return_ans.ans)
     userchat.value.push({id: usernum.value++ , text: return_ans.ans ,class:"bot-chat-zone"})
     userinput.value=""
+}
+async function SaveHistory()
+{
+    await axios.post("http://localhost:5000/sendhistory",userchat.value).then(response => {console.log(response.data);}).catch(error => {console.log(error.data)});
+}
+async function LoadHistory()
+{
+    console.log(HistoryId.value)
+    console.log(userchat.value)
+    await axios.post("http://localhost:5000/history",HistoryId.value).then(response => {console.log(response.data);userchat.value = response.data}).catch(error => {console.log(error.data)});
+    console.log(userchat.value)
 }
 </script>
 
@@ -153,6 +170,8 @@ async function SubmitFunction()
     display: flex;
     justify-content: center;
     align-items: center;
+    resize:vertical;
+    display:flex;
 }
 
 #input-field {
@@ -163,6 +182,8 @@ async function SubmitFunction()
     border: none;
     flex-grow: 1;
     background-color:antiquewhite;
+    resize:vertical;
+    display:felx;
 }
 
 #submit-button {

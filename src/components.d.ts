@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    History: typeof import('./components/layouts/history.vue')['default']
     Ranklist: typeof import('./components/layouts/ranklist.vue')['default']
     TabPane: typeof import('./components/layouts/TabPane.vue')['default']
   }
