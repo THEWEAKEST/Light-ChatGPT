@@ -1,7 +1,7 @@
 <template>
     <el-container id="main">
         <el-header id="HeadLine" style="min-height:200px;justify-content: center;align-content: center;">
-            <p style="font-size:xx-large">GENERAL</p><br>
+            <p style="font-size:xx-large">Science</p><br>
             <el-button @click="SaveHistory">SAVE<el-icon><Download/></el-icon></el-button>
             <el-button @click="LoadHistory">LOAD<el-icon><Upload/></el-icon></el-button><br>
             <el-input-number v-model="HistoryId" :min="1" :max="99"></el-input-number>

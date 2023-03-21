@@ -9,6 +9,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Agree: typeof import('./components/layouts/agree.vue')['default']
+    Art: typeof import('./components/layouts/art.vue')['default']
     Ban: typeof import('./components/layouts/Ban.vue')['default']
     BaseHeader: typeof import('./components/layouts/BaseHeader.vue')['default']
     BaseSide: typeof import('./components/layouts/BaseSide.vue')['default']
@@ -36,6 +38,7 @@ declare module '@vue/runtime-core' {
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     History: typeof import('./components/layouts/history.vue')['default']
     Ranklist: typeof import('./components/layouts/ranklist.vue')['default']
+    Science: typeof import('./components/layouts/Science.vue')['default']
     TabPane: typeof import('./components/layouts/TabPane.vue')['default']
   }
 }
